@@ -10,7 +10,9 @@
 </template>
 
 <script>
+import db from '@/components/Firebase/firebaseInit'
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   data: () => ({
     input: ''
@@ -20,12 +22,21 @@ export default {
     ...mapGetters(['todoLength']),
     handleAddTodo(e) {
       e.preventDefault()
-      this.createTodo({
-        id: this.todoLength(),
-        text: this.input,
-        done: false
-      })
       this.input = ''
+      db
+        .collection('todos')
+        .add({
+          text: this.input,
+          done: false
+        })
+        .then(() => {
+          this.createTodo({
+            id: this.todoLength(),
+            text: this.input,
+            done: false
+          })
+        })
+        .catch(err => console.log(err))
     }
   }
 }

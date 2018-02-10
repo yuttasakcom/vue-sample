@@ -1,98 +1,98 @@
 <template>
-    <div>
-        <ul>
+    <div id="todos">
+        <ul class="collection with-header">
+          <li class="collection-header">
+            <h4>Todos</h4>
+          </li>
+          
+          <div v-if="todos.length > 0">
             <li 
-                :class="{complete: todo.done}"
-                v-for="todo in todos.filter(shouldShowTodo)"
-                :key="todo.text">
-                {{ todo.text }}
-                <input type="checkbox" v-model="todo.done" >
+              class="collection-item"
+              v-for="todo in todos.filter(shouldShowTodo)"
+              :key="todo.id"
+            >
+            <p>
+              <input type="checkbox" :id="todo.id" v-model="todo.done" />
+              <label :for="todo.id"><span :class="{'todo-done': todo.done}">{{ todo.text }}</span></label>
+            </p>
+              
             </li>
+          </div>
+
+          <div v-else>
+            <li class="collection-item">
+              <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-green-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div>
+                  <div class="gap-patch">
+                    <div class="circle"></div>
+                  </div>
+                  <div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </div>
         </ul>
 
         <TodoInput />
 
-        <label for="show-completed" class="show-completed">
-            Show Completed Items?
-            <input type="checkbox" :value="this.showDone" @click="showAll">
-        </label>
+        <p>
+          <input type="checkbox" id="showOne" :value="this.showDone" @click="showAll">
+          <label for="showOne">Show Completed Items?</label>
+        </p>
     </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import TodoInput from "./TodoInput";
+import db from '@/components/Firebase/firebaseInit'
+import { mapGetters, mapActions } from 'vuex'
+import TodoInput from './TodoInput'
 export default {
+  name: 'todos',
+  created() {
+    db
+      .collection('todos')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          this.createTodo({
+            id: doc.id,
+            text: doc.data().text,
+            done: doc.data().done
+          })
+        })
+      })
+  },
   components: {
     TodoInput
   },
   computed: {
-    ...mapGetters(["todos", "showDone"])
+    ...mapGetters(['todos', 'showDone'])
   },
   methods: {
-    ...mapActions(["updateShowDone"]),
+    ...mapActions(['createTodo', 'updateShowDone']),
     shouldShowTodo(todo) {
       if (this.showDone) {
-        return true;
+        return true
       } else {
-        return !todo.done;
+        return !todo.done
       }
     },
     showAll() {
-      this.updateShowDone(!this.showDone);
+      this.updateShowDone(!this.showDone)
     }
   }
-};
+}
 </script>
 
-<style>
-body {
-  font-family: Helvetica, sans-serif;
-  color: darkslategray;
-  font-size: 1.4em;
-  margin: 1.4em;
-  width: 22em;
-  position: relative;
-}
-
-input[type="checkbox"] {
-  position: absolute;
-  right: 0;
-  padding: 1em;
-  cursor: pointer;
-}
-
-li {
-  list-style-type: none;
-  padding: 1em 0 1em 0;
-  border-bottom: 1px solid lightblue;
-  position: relative;
-}
-
-li input {
-  transform: scale(1.8);
-}
-
-ul {
-  padding: 0;
-}
-
-label {
-  width: 80%;
-}
-
-.complete {
+<style scoped>
+.todo-done {
   color: gainsboro;
   text-decoration: line-through;
   font-style: italic;
-}
-
-.show-completed {
-  font-size: 1rem;
-  color: slategray;
-}
-
-.show-completed input {
-  transform: scale(1.4);
 }
 </style>

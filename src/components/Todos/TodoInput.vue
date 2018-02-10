@@ -1,31 +1,38 @@
 <template>
     <div>
         <form @submit="handleAddTodo($event)">
-            <input type="text" v-model="input">
+            <div class="input-field">
+                <input type="text" v-model="input">
+                <label class="white-black" for="email">Create todo</label>
+            </div>
         </form>
     </div>
 </template>
 
 <script>
-    export default {
-        data: () => ({
-            input: ''
-        }),
-        methods: {
-            handleAddTodo(e) {
-                e.preventDefault()
-                this.$data.todos.push({ text: this.input, done: false })
-                this.input = ''
-            }
-        }
+import { mapActions, mapGetters } from 'vuex'
+export default {
+  data: () => ({
+    input: ''
+  }),
+  methods: {
+    ...mapActions(['createTodo']),
+    ...mapGetters(['todoLength']),
+    handleAddTodo(e) {
+      e.preventDefault()
+      this.createTodo({
+        id: this.todoLength(),
+        text: this.input,
+        done: false
+      })
+      this.input = ''
     }
+  }
+}
 </script>
 
-<style>
-    input[type=text] {
-        margin-bottom: 1em;
-        padding: 0.8em;
-        width: 90%;
-        font-size: 0.7em;
-    }
+<style scoped>
+.input-field {
+  margin-top: 2em;
+}
 </style>

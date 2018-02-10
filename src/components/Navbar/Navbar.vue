@@ -6,6 +6,7 @@
         <ul class="right">
           <li v-if="isLoggedIn"><span class="email black-text">{{ currentUser }}</span></li>
           <li v-if="isLoggedIn"><router-link to="/">Dashboard</router-link></li>
+          <li v-if="isLoggedIn"><router-link to="/todos">Todos</router-link></li>
           <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
           <li v-if="!isLoggedIn"><router-link to="/register">Register</router-link></li>
           <li v-if="isLoggedIn"><button class="btn black" @click="logout">Logout</button></li>

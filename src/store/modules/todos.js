@@ -1,48 +1,41 @@
 const state = {
   showDone: false,
-  todos: [
-    {
-      id: 1,
-      text: "Refactor CSS",
-      done: true
-    },
-    {
-      id: 2,
-      text: "Scure Docker Instaces",
-      done: false
-    },
-    {
-      id: 3,
-      text: "Inject flavoring",
-      done: false
-    }
-  ]
-};
+  todos: []
+}
 
 const getters = {
   todos({ todos }) {
-    return todos;
+    return todos
+  },
+  todoLength({ todos }) {
+    return parseInt(todos.length) + 1
   },
   showDone({ showDone }) {
-    return showDone;
+    return showDone
   }
-};
+}
 
 const mutations = {
+  createTodo(state, todo) {
+    state.todos.push(todo)
+  },
   updateShowDone(state, payload) {
-    state.showDone = payload;
+    state.showDone = payload
   }
-};
+}
 
 const actions = {
+  createTodo({ commit }, todo) {
+    commit('createTodo', todo)
+  },
   updateShowDone({ commit }, payload) {
-    commit("updateShowDone", payload);
+    commit('updateShowDone', payload)
   }
-};
+}
 
 export default {
   state,
   getters,
   mutations,
   actions
-};
+}

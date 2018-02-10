@@ -12,6 +12,9 @@ import EditEmployee from '@/components/Employees/EditEmployee'
 import Login from '@/components/Authentication/Login'
 import Register from '@/components/Authentication/Register'
 
+// Todos
+import Todos from '@/components/Todos/Todos'
+
 Vue.use(Router)
 
 let router = new Router({
@@ -62,6 +65,14 @@ let router = new Router({
       component: Register,
       meta: {
         requiresGuest: true
+      }
+    },
+    {
+      path: '/todos',
+      name: 'todos',
+      component: Todos,
+      meta: {
+        requiresAuth: true
       }
     }
   ]

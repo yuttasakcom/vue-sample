@@ -40,8 +40,9 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
-            alert(`${user.email}`)
-            this.$router.push('/')
+            this.$router.go({
+              path: this.$router.path
+            })
           },
           err => {
             alert(err.message)

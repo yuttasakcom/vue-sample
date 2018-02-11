@@ -2,6 +2,8 @@ import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 const config = {
   context: path.resolve(__dirname),
   entry: {
@@ -38,20 +40,22 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'index.html',
       inject: true
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      }
     })
   ],
   devServer: {
     inline: true
   },
-  devtool: 'cheap-module-eval-source-map'
+  devtool: isProduction ? 'source-map' : 'cheap-module-eval-source-map'
 }
 
-if (process.env.NODE_ENV == 'production') {
+if (isProduction) {
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
+    })
+  )
   config.plugins.push(new webpack.optimize.UglifyJsPlugin())
 }
 

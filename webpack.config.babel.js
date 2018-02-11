@@ -45,7 +45,7 @@ const config = {
   devServer: {
     inline: true
   },
-  devtool: isProduction ? 'source-map' : 'cheap-module-eval-source-map'
+  devtool: isProduction ? 'source-map' : 'inline-source-map'
 }
 
 if (isProduction) {

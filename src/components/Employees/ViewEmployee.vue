@@ -3,7 +3,6 @@
     <ul class="collection with-header">
       <li class="collection-header">
         <h4>{{ name }}</h4>
-        {{yo}}
       </li>
       <li class="collection-item">Employee ID#: {{ employee_id }}</li>
       <li class="collection-item">Department: {{ dept }}</li>

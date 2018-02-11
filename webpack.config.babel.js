@@ -2,7 +2,7 @@ import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 
-export default {
+const config = {
   context: path.resolve(__dirname),
   entry: {
     app: './src'
@@ -48,5 +48,11 @@ export default {
   devServer: {
     inline: true
   },
-  devtool: '#inline-cheap-module-source-map'
+  devtool: 'cheap-module-eval-source-map'
 }
+
+if (process.env.NODE_ENV == 'production') {
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin())
+}
+
+export default config

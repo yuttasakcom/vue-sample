@@ -53,20 +53,6 @@ import { mapGetters, mapActions } from 'vuex'
 import TodoInput from './TodoInput'
 export default {
   name: 'todos',
-  created() {
-    db
-      .collection('todos')
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          this.createTodo({
-            id: doc.id,
-            text: doc.data().text,
-            done: doc.data().done
-          })
-        })
-      })
-  },
   components: {
     TodoInput
   },
@@ -74,7 +60,7 @@ export default {
     ...mapGetters(['todos', 'showDone'])
   },
   methods: {
-    ...mapActions(['createTodo', 'updateShowDone']),
+    ...mapActions(['updateShowDone']),
     shouldShowTodo(todo) {
       if (this.showDone) {
         return true

@@ -1,3 +1,5 @@
+import db from '@/components/Firebase/firebaseInit'
+
 const state = {
   showDone: false,
   todos: []
@@ -30,6 +32,20 @@ const actions = {
   },
   updateShowDone({ commit }, payload) {
     commit('updateShowDone', payload)
+  },
+  todosInit({ commit }) {
+    db
+      .collection('todos')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          commit('createTodo', {
+            id: doc.id,
+            text: doc.data().text,
+            done: doc.data().done
+          })
+        })
+      })
   }
 }
 
